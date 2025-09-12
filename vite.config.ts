@@ -1,5 +1,7 @@
 import { defineConfig, loadEnv, type ServerOptions } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
 
 type TMode = 'development' | 'production'
 
@@ -50,7 +52,12 @@ export default defineConfig(({ mode }) => {
     }
 
     return {
-        plugins: [react()],
+        plugins: [react(), tailwindcss()],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'src'),
+            },
+        },
         server: options,
         preview: options,
         build: {
