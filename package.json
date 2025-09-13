@@ -8,6 +8,8 @@
         "lint:eslint": "eslint --max-warnings=0",
         "format:check": "prettier --check .",
         "format:fix": "prettier --write .",
+        "type-check": "tsc --noEmit",
+        "audit": "npm audit --audit-level=moderate",
         "dev": "vite --mode development",
         "test": "vitest --mode test",
         "test:coverage": "vitest run --coverage --mode test",
