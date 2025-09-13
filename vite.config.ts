@@ -69,6 +69,7 @@ export default defineConfig(({ mode }) => {
                     'node_modules',
                     'src/**/types/**',
                     'src/**/interfaces/**',
+                    'src/**/constants/**',
                     'src/**/*.d.ts',
                     'src/setupTests.ts',
                     'src/**/*.{test,spec}.{ts,tsx}',
@@ -83,7 +84,7 @@ export default defineConfig(({ mode }) => {
         },
         resolve: {
             alias: {
-                '@': path.resolve(__dirname, 'src'),
+                '@': path.resolve(__dirname, './src'),
             },
         },
         server: options,
