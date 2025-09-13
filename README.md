@@ -2,68 +2,235 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ⚡ **Vite** - Fast build tool and dev server
+- ⚛️ **React 19** - Latest React with StrictMode
+- 🔷 **TypeScript** - Strict type checking
+- �� **Tailwind CSS** - Utility-first CSS framework
+- �� **ESLint + Prettier** - Code quality and formatting
+- �� **Husky + lint-staged** - Pre-commit hooks
+- 📝 **Commitlint** - Conventional commit messages
+- �� **Multi-environment** - Development/Production modes
+- �� **Path aliases** - `@/` for src imports
+- 🔄 **API proxy** - `/api/*` routes to backend
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
+- Node.js 18+
+- npm or pnpm
 
-            // Remove tseslint.configs.recommended and replace with this
-            ...tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            ...tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            ...tseslint.configs.stylisticTypeChecked,
+### Installation
 
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
+1. **Clone and install dependencies**
+
+    ```bash
+    git clone <repository-url>
+    cd sparkonomy-ui
+    npm install
+    ```
+
+2. **Environment Configuration**
+
+    Create environment files for each mode:
+
+    ```bash
+    # Development (staging)
+    cp .env.example .env.development
+
+    # Production
+    cp .env.example .env.production
+    ```
+
+    Required environment variables:
+
+    ```bash
+    VITE_ENV=development|production
+    PORT=5173
+    BACKEND_URL=http://localhost:8000
+    ```
+
+3. **Development Server**
+
+    ```bash
+    npm run dev
+    ```
+
+    - Runs on `http://localhost:5173` (or configured PORT)
+    - Auto-opens browser
+    - API proxy: `/api/*` → `BACKEND_URL`
+
+4. **Build for Production**
+    ```bash
+    npm run build
+    npm run preview
+    ```
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint:eslint` - Run ESLint
+- `npm run format:check` - Check Prettier formatting
+- `npm run format:fix` - Fix Prettier formatting
+
+## Vite Configuration
+
+### Overview
+
+The project uses a custom Vite configuration (`vite.config.ts`) with environment validation, API proxying, and build optimizations.
+
+### Key Features
+
+- **Environment Validation**: Automatically validates required environment variables
+- **API Proxy**: Routes `/api/*` requests to your backend server
+- **Path Aliases**: `@/` maps to `src/` directory
+- **Multi-mode Support**: Development and Production modes
+- **Build Optimizations**: Minification and CSS optimization
+
+### Environment Modes
+
+```bash
+# Development mode (staging)
+npm run dev --mode development
+
+# Production mode
+npm run build --mode production
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Modifying Configuration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+#### 1. **Environment Variables**
 
-export default tseslint.config([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended,
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
+Edit the `AppEnv` interface in `vite.config.ts`:
+
+```typescript
+interface AppEnv {
+    PORT: string
+    BACKEND_URL: string
+    VITE_ENV: TMode
+    // Add new variables here
+    API_KEY: string
+}
 ```
+
+Then add validation:
+
+```typescript
+const requiredEnvs: (keyof AppEnv)[] = [
+    'PORT',
+    'BACKEND_URL',
+    'VITE_ENV',
+    'API_KEY', // Add to validation
+]
+```
+
+#### 2. **API Proxy Settings**
+
+Modify the proxy configuration:
+
+```typescript
+proxy: {
+    '/api': {
+        target: env.BACKEND_URL,
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+    },
+    // Add more proxy routes
+    '/uploads': {
+        target: env.UPLOAD_URL,
+        changeOrigin: true,
+    }
+}
+```
+
+#### 3. **Build Options**
+
+Customize build settings:
+
+```typescript
+build: {
+    minify: true,
+    cssMinify: true,
+    sourcemap: envMode === 'development', // Source maps for dev
+    rollupOptions: {
+        output: {
+            manualChunks: {
+                vendor: ['react', 'react-dom'], // Split vendor chunks
+            }
+        }
+    }
+}
+```
+
+#### 4. **Server Options**
+
+Modify development server:
+
+```typescript
+const options: ServerOptions = {
+    port,
+    open: true, // Auto-open browser
+    host: '0.0.0.0', // Allow external connections
+    proxy: {
+        /* ... */
+    },
+}
+```
+
+#### 5. **Path Aliases**
+
+Add more aliases:
+
+```typescript
+resolve: {
+    alias: {
+        '@': path.resolve(__dirname, 'src'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@utils': path.resolve(__dirname, 'src/utils'),
+    },
+}
+```
+
+### Environment Files
+
+Create these files in your project root:
+
+```bash
+# .env.development
+VITE_ENV=development
+PORT=5173
+BACKEND_URL=http://localhost:8000
+
+# .env.production
+VITE_ENV=production
+PORT=3000
+BACKEND_URL=https://api.yourdomain.com
+```
+
+### Troubleshooting
+
+**Environment validation errors:**
+
+- Ensure all required variables are set in your `.env.{mode}` file
+- Check that `VITE_ENV` matches your mode (development/production)
+
+**Port conflicts:**
+
+- Change `PORT` in your environment file
+- Or use `npm run dev -- --port 3001`
+
+**API proxy not working:**
+
+- Verify `BACKEND_URL` is correct
+- Check that your backend server is running
+- Ensure the proxy path (`/api`) matches your frontend requests
+
+**Build issues:**
+
+- Run `npm run build` to see detailed error messages
+- Check TypeScript errors with `npm run type-check`
+- Verify all environment variables are set for production

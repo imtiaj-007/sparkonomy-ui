@@ -27,7 +27,16 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["src/*"]
-        }
+        },
+
+        /* Test types */
+        "types": ["vitest/globals", "@testing-library/jest-dom"]
     },
-    "include": ["src"]
+    "include": [
+        "src",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx"
+    ]
 }
