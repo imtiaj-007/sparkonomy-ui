@@ -79,7 +79,11 @@ const ChartDemo: React.FC = () => {
                     />
                 </div>
             </div>
-            <IncomeGrowthChart data={chartData} height={450} isClient={true} />
+            <IncomeGrowthChart
+                data={chartData}
+                height={450}
+                isClient={true}
+            />
         </div>
     )
 }

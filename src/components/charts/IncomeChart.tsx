@@ -97,6 +97,7 @@ const IncomeGrowthChart: React.FC<IncomeGrowthChartProps> = ({
             xAxis: [
                 {
                     type: 'category',
+                    data: data.months,
                     axisPointer: {
                         type: 'shadow',
                     },

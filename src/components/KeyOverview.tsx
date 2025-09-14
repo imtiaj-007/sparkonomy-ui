@@ -142,13 +142,13 @@ const KeyOverview: React.FC = () => {
                     </RadioGroup>
                 </div>
             </div>
-            <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-2">
                 {overViews.map((ov, index) => (
                     <div
                         key={ov.title}
                         className={cn(
                             'border rounded-xl p-4 space-y-1.5',
-                            index === 0 && 'col-span-2 md:col-span-1'
+                            index === 0 && 'col-span-2 lg:col-span-1'
                         )}>
                         <h3>{ov.title}</h3>
                         <p className="text-(--brand-p1)/80 text-xl font-bold">

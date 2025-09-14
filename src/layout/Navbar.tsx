@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
 
             <Avatar className="col-span-2 justify-self-end">
                 <AvatarImage
-                    src="https://github.com/shadcn.png"
+                    src="/avatar.jpg"
                     alt="Avatar Image"
                 />
                 <AvatarFallback>CN</AvatarFallback>

@@ -27,6 +27,7 @@ export interface CustomSelectProps {
     placeholder?: string
     className?: string
     triggerClassName?: string
+    triggerIconClassName?: string
     contentClassName?: string
     onChange?: (value: string) => void
     disabled?: boolean
@@ -39,6 +40,7 @@ export function CustomSelect({
     placeholder = 'Select an option',
     className,
     triggerClassName,
+    triggerIconClassName,
     contentClassName,
     onChange,
     disabled = false,
@@ -83,7 +85,8 @@ export function CustomSelect({
             onValueChange={onChange}
             disabled={disabled}>
             <SelectTrigger
-                className={cn('w-[180px]', triggerClassName, className)}>
+                className={cn('w-[180px]', triggerClassName, className)}
+                iconClassName={triggerIconClassName}>
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent className={contentClassName}>

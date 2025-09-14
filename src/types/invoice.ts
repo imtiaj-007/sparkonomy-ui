@@ -21,3 +21,20 @@ export interface MonthlyData {
     paymentOverdue: number
     growthData: number | null
 }
+
+export interface Invoice {
+    title: string
+    amount: number
+    currency: string
+    date?: Date
+    dueDate: Date
+    status?:
+        | 'paid'
+        | 'unpaid'
+        | 'partially paid'
+        | 'disputed'
+        | 'awaited'
+        | 'overdue'
+        | 'draft'
+    notification?: number
+}
