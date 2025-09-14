@@ -1,66 +1,14 @@
 import { useState } from 'react'
-import { CalendarSearch, Crown, type LucideIcon } from 'lucide-react'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Crown } from 'lucide-react'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { filterOptions, monthlyData } from '@/constants/invoiceConstants'
+import type { MonthlyData, OverviewItem, TimeFilter } from '@/types/invoice'
 import { cn } from '@/lib/utils'
 
-interface TimeFilter {
-    label: string
-    value: string
-    icon: LucideIcon | null
-    pro: boolean
-}
-
-interface OverviewItem {
-    title: string
-    amount: number
-    currency: string
-}
-
-interface MonthlyData {
-    month: string
-    year: number
-    totalEarnings: number
-    paymentAwaited: number
-    paymentOverdue: number
-}
-
-const filterOptions: TimeFilter[] = [
-    { label: '1 Month', value: '1m', icon: null, pro: false },
-    { label: '3 Month', value: '3m', icon: null, pro: false },
-    { label: '1 Year', value: '12m', icon: null, pro: true },
-    { label: 'Custom', value: 'custom', icon: CalendarSearch, pro: false },
-]
-
-const generateMonthlyData = (): MonthlyData[] => {
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ]
-
-    return months.map(month => ({
-        month,
-        year: 2025,
-        totalEarnings: Math.floor(Math.random() * 20000) + 100000,
-        paymentAwaited: Math.floor(Math.random() * 5000) + 20000,
-        paymentOverdue: Math.floor(Math.random() * 3000) + 10000,
-    }))
-}
-
-const monthlyData = generateMonthlyData()
-
 const KeyOverview: React.FC = () => {
-    const [selectedFilter, setSelectedFilter] = useState('3m')
+    const [selectedFilter, setSelectedFilter] =
+        useState<TimeFilter['value']>('3m')
     const [filteredData, setFilteredData] = useState<MonthlyData[]>(
         monthlyData.slice(0, 3)
     )
@@ -74,6 +22,9 @@ const KeyOverview: React.FC = () => {
                 break
             case '3m':
                 setFilteredData(monthlyData.slice(0, 3))
+                break
+            case '6m':
+                setFilteredData(monthlyData.slice(0, 6))
                 break
             case '12m':
                 setFilteredData(monthlyData)

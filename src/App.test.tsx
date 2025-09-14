@@ -6,6 +6,6 @@ describe('App', () => {
         render(<App />)
         const headingElement = screen.getByRole('heading', { level: 1 })
         expect(headingElement).toBeInTheDocument()
-        expect(headingElement).toHaveTextContent('App Page')
+        expect(headingElement).toHaveTextContent('Sparkonomy UI')
     })
 })

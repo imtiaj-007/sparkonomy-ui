@@ -1,10 +1,12 @@
 import Layout from '@/layout'
 import { CirclePlus } from 'lucide-react'
 import KeyOverview from '@/components/KeyOverview'
+import ChartDemo from '@/components/charts/ChartDemo'
 
 function App() {
     return (
         <Layout>
+            <h1 className="sr-only">Sparkonomy UI</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4 md:py-12">
                 <div className="space-y-4">
                     <div className="flex flex-col items-center bg-gray-100 rounded-4xl md:rounded-2xl lg:rounded-xl p-8">
@@ -22,6 +24,9 @@ function App() {
                 </div>
                 <div className="flex flex-col items-center gap-4">
                     <KeyOverview />
+                </div>
+                <div className="col-span-full">
+                    <ChartDemo />
                 </div>
             </div>
         </Layout>
