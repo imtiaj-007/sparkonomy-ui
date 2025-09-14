@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useMemo } from 'react'
 import * as echarts from 'echarts'
+import { tooltipFormatter } from '@/lib/utils'
 
-interface ChartData {
+export interface ChartData {
     months: string[]
     incomeData: number[]
     growthData: (number | null)[]
@@ -75,17 +75,7 @@ const IncomeGrowthChart: React.FC<IncomeGrowthChartProps> = ({
                         color: '#999',
                     },
                 },
-                formatter: (params: any) => {
-                    let result = `${params[0].name}<br/>`
-                    params.forEach((param: any) => {
-                        if (param.seriesName === 'income') {
-                            result += `${param.marker} ${param.seriesName}: $${param.value.toLocaleString()}k<br/>`
-                        } else if (param.value !== null) {
-                            result += `${param.marker} ${param.seriesName}: ${param.value > 0 ? '+' : ''}${param.value}%<br/>`
-                        }
-                    })
-                    return result
-                },
+                formatter: tooltipFormatter,
             },
             legend: {
                 data: ['income', 'momGrowth'],

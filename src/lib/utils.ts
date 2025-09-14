@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MonthlyData } from '@/types/invoice'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -43,4 +44,16 @@ export const generateMonthlyData = (): MonthlyData[] => {
 
         return { ...current, growthData: growth }
     })
+}
+
+export const tooltipFormatter = (params: any) => {
+    let result = `${params[0].name}<br/>`
+    params.forEach((param: any) => {
+        if (param.seriesName === 'income') {
+            result += `${param.marker} ${param.seriesName}: $${param.value.toLocaleString()}k<br/>`
+        } else if (param.value !== null) {
+            result += `${param.marker} ${param.seriesName}: ${param.value > 0 ? '+' : ''}${param.value}%<br/>`
+        }
+    })
+    return result
 }
